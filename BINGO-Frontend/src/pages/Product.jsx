@@ -6,6 +6,10 @@ import Newsletter from '../components/Newsletter'
 import Footer from '../components/Footer'
 import { Remove, Add } from '@material-ui/icons'
 import { mobile } from '../responsive'
+import { useLocation } from 'react-router-dom'
+import { useState } from 'react'
+import { useEffect } from 'react'
+import { publicRequest } from '../requestMethods'
 
 const Container = styled.div`
 
@@ -69,7 +73,7 @@ const FilterColor = styled.div`
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background-color: ${props=>props.color};
+    background-color: ${props => props.color};
     margin: 0px 5px;
     cursor: pointer;
 `
@@ -122,52 +126,64 @@ const Button = styled.button`
 `
 
 const Product = () => {
-  return (
-    <Container>
-        <Navbar />
-        <Announcement />
-        <Wrapper>
-            <ImgContainer>
-                <Image src = "https://img.freepik.com/free-photo/portrait-young-beautiful-smiling-hipster-girl-trendy-summer-jeans-jacket-clothes_158538-1252.jpg?w=740&t=st=1660771122~exp=1660771722~hmac=f8419331778c245c69647d9c7cf5ca9001d150cd7c158b9b2d5ceec628ddbe8b" />
-            </ImgContainer>
-            <InfoContainer>
-                <Title>Denim Wear</Title>
-                <Desc>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero alias error adipisci magni natus deleniti mollitia laboriosam necessitatibus odio, eligendi nihil eaque at non corrupti modi nulla voluptatem soluta ullam!
-                Error vel corporis fugit deleniti quae, inventore quasi, natus placeat tenetur rerum in est velit impedit sint fuga? Placeat in asperiores possimus suscipit amet, beatae modi dolore quis ex aspernatur?</Desc>
-                <Price>₹ 1299</Price>
-                <FilterContainer>
-                    <Filter>
-                        <FilterTitle>Color</FilterTitle>
-                        <FilterColor color="Gray" />
-                        <FilterColor color="Blue" />
-                        <FilterColor color ="Black" />
-                    </Filter>
-                    <Filter>
-                        <FilterTitle>Size</FilterTitle>
-                        <FilterSize>
-                            <FilterSizeOption>S</FilterSizeOption>
-                            <FilterSizeOption>M</FilterSizeOption>
-                            <FilterSizeOption>L</FilterSizeOption>
-                            <FilterSizeOption>XL</FilterSizeOption>
-                            <FilterSizeOption>XXL</FilterSizeOption>
-                        </FilterSize>
-                    </Filter>
-                </FilterContainer>
-                <AddContainer>
-                    <AmountContainer>
-                        <Remove />
-                        <Amount>1</Amount>
-                        <Add />
-                    </AmountContainer>
-                    <Button>ADD TO CART</Button>
+    const location = useLocation();
+    const id = location.pathname.split("/")[2];
+    const [product, setProduct] = useState({});
 
-                </AddContainer>
-            </InfoContainer>
-        </Wrapper>
-        <Newsletter />
-        <Footer />
-    </Container>
-  )
+    useEffect(() => {
+        const getProduct = async () => {
+            try {
+                const res = await publicRequest.get("/products/find/" + id)
+                setProduct(res.data);
+            } catch {}
+        }
+        getProduct()
+    }, [id])
+    return (
+        <Container>
+            <Navbar />
+            <Announcement />
+            <Wrapper>
+                <ImgContainer>
+                    <Image src={product.img} />
+                </ImgContainer>
+                <InfoContainer>
+                    <Title>{product.title}</Title>
+                    <Desc>{product.desc}</Desc>
+                    <Price>₹ {product.price}</Price>
+                    <FilterContainer>
+                        <Filter>
+                            <FilterTitle>Color</FilterTitle>
+                            {product.color.map((c) => (
+                                <FilterColor color={c} key={c} />
+                            ))}
+                        </Filter>
+                        <Filter>
+                            <FilterTitle>Size</FilterTitle>
+                            <FilterSize>
+                                <FilterSizeOption>S</FilterSizeOption>
+                                <FilterSizeOption>M</FilterSizeOption>
+                                <FilterSizeOption>L</FilterSizeOption>
+                                <FilterSizeOption>XL</FilterSizeOption>
+                                <FilterSizeOption>XXL</FilterSizeOption>
+                            </FilterSize>
+                        </Filter>
+                    </FilterContainer>
+                    <AddContainer>
+                        <AmountContainer>
+                            <Remove />
+                            <Amount>1</Amount>
+                            <Add />
+                        </AmountContainer>
+                        <Button>ADD TO CART</Button>
+
+                    </AddContainer>
+                </InfoContainer>
+            </Wrapper>
+            <Newsletter />
+            <Footer />
+        </Container>
+    )
 }
 
 export default Product

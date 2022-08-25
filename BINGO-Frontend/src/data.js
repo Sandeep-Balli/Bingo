@@ -26,17 +26,20 @@ export const categories = [
     {
         id: 1,
         img: "https://img.freepik.com/free-photo/fashionable-pale-brunette-long-green-dress-black-jacket-sunglasses-standing-street-during-daytime-against-wall-light-city-building_197531-24468.jpg?w=740&t=st=1660770453~exp=1660771053~hmac=4d8f9052499db969b3e1bb0460340f8426860d6e1d91aebcbf715a1125d099c2",
-        title: "PARTY WEAR"
+        title: "PARTY WEAR",
+        cat: "coat"
     },
     {
         id: 2,
         img: "https://img.freepik.com/free-photo/young-woman-with-shopping-bags-beautiful-dress_1303-17550.jpg?w=740&t=st=1660770207~exp=1660770807~hmac=c94e26642c7db1e0fcd52bf3ef7ae871dc7a33b97a9a71022ccc0e269cff7f3e",
-        title: "CASUAL WEAR"
+        title: "CASUAL WEAR",
+        cat: "casual"
     },
     {
         id: 3,
         img: "https://img.freepik.com/premium-photo/portrait-smiling-beautiful-indian-girl-home-young-woman-model-with-golden-jewelry-set_118342-41676.jpg",
-        title: "ETHINIC"
+        title: "ETHINIC",
+        cat: "women"
     }
 ]
 
