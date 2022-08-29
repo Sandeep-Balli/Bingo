@@ -5,6 +5,7 @@ import Footer from '../components/Footer'
 import styled from 'styled-components'
 import { Add, Remove } from '@material-ui/icons'
 import { mobile } from '../responsive'
+import { useSelector } from 'react-redux'
 
 const Container = styled.div`
 
@@ -31,9 +32,9 @@ const TopButton = styled.button`
     padding: 10px;
     font-weight: 600;
     cursor: pointer;
-    border: ${(props)=>props.type === "filled" && "none"};
+    border: ${(props) => props.type === "filled" && "none"};
     background-color: ${(props) => props.type === "filled" ? "black" : "transparent"};
-    color: ${(props)=>props.type === "filled" && "white"};
+    color: ${(props) => props.type === "filled" && "white"};
 `
 
 const TopTexts = styled.div`
@@ -150,8 +151,8 @@ const SummaryItem = styled.div`
     margin: 30px 0px;
     display: flex;
     justify-content: space-between;
-    font-weight: ${props=>props.type === "total" && "500"};
-    font-size: ${props=>props.type === "total" && "24px"};
+    font-weight: ${props => props.type === "total" && "500"};
+    font-size: ${props => props.type === "total" && "24px"};
 `
 
 const SummaryItemText = styled.span`
@@ -171,87 +172,78 @@ const Button = styled.button`
 `
 
 const Cart = () => {
-  return (
-    <Container>
-        <Navbar />
-        <Announcement />
-        <Wrapper>
-            <Title>YOUR CART</Title>
-            <Top>
-                <TopButton>CONTINUE SHOPPING</TopButton>
-                <TopTexts>
-                    <TopText>Shopping Bag(2)</TopText>
-                    <TopText>Your Wishlist(0)</TopText>
-                </TopTexts>
-                <TopButton type='filled'>CHECKOUT</TopButton>
-            </Top>
-            <Bottom>
-                <Info>
-                    <Product>
-                        <ProductDetail>
-                            <Image src='https://img.freepik.com/free-photo/portrait-young-beautiful-smiling-hipster-girl-trendy-summer-jeans-jacket-clothes_158538-1252.jpg?w=740&t=st=1660771122~exp=1660771722~hmac=f8419331778c245c69647d9c7cf5ca9001d150cd7c158b9b2d5ceec628ddbe8b'/>
-                            <Details>
-                                <ProductName><b>Product:</b> DENIM WEAR</ProductName>
-                                <ProductId><b>ID:</b> 7372382</ProductId>
-                                <ProductColor color='#645cf2'/>
-                                <ProductSize><b>Size:</b> 32</ProductSize>
-                            </Details>
-                        </ProductDetail>
-                        <PriceDetail>
-                            <ProductAmountContainer>
-                                <Add />
-                                <ProductAmount>2</ProductAmount>
-                                <Remove />
-                            </ProductAmountContainer>
-                            <ProductPrice>₹ 1299</ProductPrice>
-                        </PriceDetail>
-                    </Product>
-                    <Hr />
-                    <Product>
-                        <ProductDetail>
-                            <Image src='https://img.freepik.com/free-photo/portrait-young-beautiful-smiling-hipster-girl-trendy-summer-jeans-jacket-clothes_158538-1252.jpg?w=740&t=st=1660771122~exp=1660771722~hmac=f8419331778c245c69647d9c7cf5ca9001d150cd7c158b9b2d5ceec628ddbe8b'/>
-                            <Details>
-                                <ProductName><b>Product:</b> DENIM WEAR</ProductName>
-                                <ProductId><b>ID:</b> 7372382</ProductId>
-                                <ProductColor color='#645cf2'/>
-                                <ProductSize><b>Size:</b> 32</ProductSize>
-                            </Details>
-                        </ProductDetail>
-                        <PriceDetail>
-                            <ProductAmountContainer>
-                                <Add />
-                                <ProductAmount>2</ProductAmount>
-                                <Remove />
-                            </ProductAmountContainer>
-                            <ProductPrice>₹ 1299</ProductPrice>
-                        </PriceDetail>
-                    </Product>
-                </Info>
-                <Summary>
-                    <SummaryTitle>ORDER SUMMARY</SummaryTitle>
-                    <SummaryItem>
-                        <SummaryItemText>Subtotal</SummaryItemText>
-                        <SummaryItemPrice>₹ 1299</SummaryItemPrice>
-                    </SummaryItem>
-                    <SummaryItem>
-                        <SummaryItemText>Estimated Shipping</SummaryItemText>
-                        <SummaryItemPrice>₹ 499</SummaryItemPrice>
-                    </SummaryItem>
-                    <SummaryItem>
-                        <SummaryItemText>Shipping Discount</SummaryItemText>
-                        <SummaryItemPrice>₹ -99</SummaryItemPrice>
-                    </SummaryItem>
-                    <SummaryItem type="total" >
-                        <SummaryItemText>Total</SummaryItemText>
-                        <SummaryItemPrice>₹ 1797</SummaryItemPrice>
-                    </SummaryItem>
-                    <Button>CHECKOUT</Button>
-                </Summary>
-            </Bottom>
-        </Wrapper>
-        <Footer />
-    </Container>
-  )
+    const cart = useSelector(state => state.cart)
+    return (
+        <Container>
+            <Navbar />
+            <Announcement />
+            <Wrapper>
+                <Title>YOUR CART</Title>
+                <Top>
+                    <TopButton>CONTINUE SHOPPING</TopButton>
+                    <TopTexts>
+                        <TopText>Shopping Bag(2)</TopText>
+                        <TopText>Your Wishlist(0)</TopText>
+                    </TopTexts>
+                    <TopButton type='filled'>CHECKOUT</TopButton>
+                </Top>
+                <Bottom>
+                    <Info>
+                        {cart.products.map((product) => (
+                            <Product>
+                                <ProductDetail>
+                                    <Image src={product.img} />
+                                    <Details>
+                                        <ProductName>
+                                            <b>Product:</b> {product.title}
+                                        </ProductName>
+                                        <ProductId>
+                                            <b>ID:</b> {product.id}
+                                        </ProductId>
+                                        <ProductColor color={product.color} />
+                                        <ProductSize>
+                                            <b>Size:</b> {product.size}
+                                        </ProductSize>
+                                    </Details>
+                                </ProductDetail>
+                                <PriceDetail>
+                                    <ProductAmountContainer>
+                                        <Add />
+                                        <ProductAmount>{product.quantity}</ProductAmount>
+                                        <Remove />
+                                    </ProductAmountContainer>
+                                    <ProductPrice>₹ {product.price * product.quantity}</ProductPrice>
+                                </PriceDetail>
+                            </Product>
+                        ))}
+                        <Hr />
+
+                    </Info>
+                    <Summary>
+                        <SummaryTitle>ORDER SUMMARY</SummaryTitle>
+                        <SummaryItem>
+                            <SummaryItemText>Subtotal</SummaryItemText>
+                            <SummaryItemPrice>₹ {cart.total}</SummaryItemPrice>
+                        </SummaryItem>
+                        <SummaryItem>
+                            <SummaryItemText>Estimated Shipping</SummaryItemText>
+                            <SummaryItemPrice>₹ 499</SummaryItemPrice>
+                        </SummaryItem>
+                        <SummaryItem>
+                            <SummaryItemText>Shipping Discount</SummaryItemText>
+                            <SummaryItemPrice>₹ -99</SummaryItemPrice>
+                        </SummaryItem>
+                        <SummaryItem type="total" >
+                            <SummaryItemText>Total</SummaryItemText>
+                            <SummaryItemPrice>₹ {cart.total}</SummaryItemPrice>
+                        </SummaryItem>
+                        <Button>CHECKOUT</Button>
+                    </Summary>
+                </Bottom>
+            </Wrapper>
+            <Footer />
+        </Container>
+    )
 }
 
 export default Cart
