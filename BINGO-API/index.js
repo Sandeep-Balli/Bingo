@@ -20,7 +20,6 @@ mongoose
         console.log(err);
     });
 
-// app.use(cors());
 app.use(cors({origin: true, credentials: true}));
 app.use(express.json());
 app.use("/api/auth", authRoute);
@@ -28,7 +27,7 @@ app.use("/api/user", userRouter);
 app.use("/api/products", productRoute);
 app.use("/api/orders", orderRoute);
 app.use("/api/carts", cartRoute);
-app.use("api/checkout", stripeRoute);
+app.use("/api/checkout", stripeRoute);
 
 app.listen(process.env.PORT || 5000, () => {
     console.log('Server running!')
